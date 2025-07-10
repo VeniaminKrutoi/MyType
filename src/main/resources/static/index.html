@@ -1,10 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Prikol</title>
+    <link rel="stylesheet" href="styles.css">
+        <script src="server-connection.js"></script>
 </head>
 <body>
-<h1>Привет</h1>
+<header>
+    mytype
+    <button class="menu-button" onclick="toggleMenu()">Меню</button>
+    <div class="dropdown-content" id="dropdownMenu">
+        <a href="#">Главная</a>
+        <a href="#">О нас</a>
+        <a href="#">Контакты</a>
+    </div>
+</header>
+
+<div class="text-typing">
+    <div class="uploading" id="uploading">
+        <p>Загрузка</p>
+    </div>
+
+    <div class="error-button" >
+        <button id="error_button" onclick="{changeText(); wait_data();}">
+            Проблема с подключением. Попробуйте еще раз.
+        </button>
+    </div>
+
+    <div class="text-full" id="text_full">
+        <div class="control-typing">
+            <button onclick="{changeText(); wait_data();}">Другой текст</button>
+            <button onclick="restart()">Перезапуск</button>
+        </div>
+        <div class="result" id="result">
+            <div class="typing-result">
+                <p>Время</p>
+                <div class="result-numbers">
+                    <p id="result_time"></p>
+                </div>
+            </div>
+
+            <div class="typing-result">
+                <p>Знаков в минуту</p>
+                <div class="result-numbers">
+                    <p id="result_spm"></p>
+                </div>
+            </div>
+
+            <div class="typing-result">
+                <p>Точность</p>
+                <div class="result-numbers">
+                    <p id="result_accuracy"></p>
+                    <p>%</p>
+                </div>
+            </div>
+        </div>
+        <div class="text" id="type"></div>
+    </div>
+</div>
+
+<div class="text-info" id="text_info">
+    <div class="info-block">
+        <div class="author">
+            <p>Автор текста: </p>
+            <p id="author"></p>
+        </div>
+
+        <div class="source">
+            <p>Ссылка на текст: </p>
+            <a id="source"></a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    Контакты: venya2005@email.com
+</footer>
+
+<script src="menu-control.js"></script>
+<script src="text-contoller.js"></script>
+
 </body>
 </html>
