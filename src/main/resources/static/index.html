@@ -2,35 +2,36 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Prikol</title>
+    <title>MyType</title>
     <link rel="stylesheet" href="styles.css">
-        <script src="server-connection.js"></script>
+    <script src="js/server-connection.js"></script>
 </head>
 <body>
 <header>
     mytype
-    <button class="menu-button" onclick="toggleMenu()">Меню</button>
+    <button class="menu-button" onclick="toggleMenu();">Меню</button>
     <div class="dropdown-content" id="dropdownMenu">
-        <a href="#">Главная</a>
-        <a href="#">О нас</a>
+        <a href="http://localhost:8080/profile">Профиль</a>
+        <a href="http://localhost:8080">Главная</a>
+        <a href="http://localhost:8080/add">Добавить текст</a>
         <a href="#">Контакты</a>
     </div>
 </header>
 
-<div class="text-typing">
+<div class="center-container">
     <div class="uploading" id="uploading">
         <p>Загрузка</p>
     </div>
 
     <div class="error-button" >
-        <button id="error_button" onclick="{changeText(); wait_data();}">
+        <button id="error_button" onclick="{changeText(); waitData();}">
             Проблема с подключением. Попробуйте еще раз.
         </button>
     </div>
 
     <div class="text-full" id="text_full">
         <div class="control-typing">
-            <button onclick="{changeText(); wait_data();}">Другой текст</button>
+            <button onclick="{changeText(); waitData();}">Другой текст</button>
             <button onclick="restart()">Перезапуск</button>
         </div>
         <div class="result" id="result">
@@ -78,8 +79,8 @@
     Контакты: venya2005@email.com
 </footer>
 
-<script src="menu-control.js"></script>
-<script src="text-contoller.js"></script>
+<script src="js/menu-control.js"></script>
+<script src="js/text-contoller.js"></script>
 
 </body>
 </html>

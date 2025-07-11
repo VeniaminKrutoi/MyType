@@ -17,7 +17,7 @@ document.addEventListener("keydown", function (event) {
 
 document.addEventListener("keypress", function (event) {
     if (finished && !waiting) {
-        start_type();
+        startType();
     }
 
     if (text[index] === event.key) {
@@ -30,29 +30,29 @@ document.addEventListener("keypress", function (event) {
     index++;
 
     if (index === text.length) {
-        end_type()
+        endType()
     }
 });
 
 const type = document.getElementById("type");
 
 // const data = {"text": "12345", "author": "я", "sourceLink": "youtube.com"}
-// set_data(data);
+// setData(data);
 
-function wait_data() {
+function waitData() {
     waiting = true;
     window.dataPromise.then(data => {
         console.log(data);
         if ('text' in data) {
-            set_data(data);
-            fill_typing();
+            setData(data);
+            fillTyping();
         } else {
-            connection_fail();
+            connectionFail();
         }
     });
 }
 
-function connection_fail(){
+function connectionFail(){
     const uploading_el = document.getElementById("uploading");
     uploading_el.style.visibility = "hidden";
 
@@ -60,13 +60,13 @@ function connection_fail(){
     error_button_el.style.visibility = "visible";
 }
 
-function set_data(data) {
+function setData(data) {
     text = data['text'];
     author = data['author'];
     source = data['sourceLink'];
 }
 
-function fill_typing() {
+function fillTyping() {
     index = 0;
     error_count = 0;
     finished = true;
@@ -108,7 +108,7 @@ function fill_typing() {
     waiting = false;
 }
 
-function start_type() {
+function startType() {
 
     finished = false;
 
@@ -117,13 +117,13 @@ function start_type() {
     start_time = Date.now();
 }
 
-function end_type() {
+function endType() {
     finished = true;
 
     const end_time = Date.now()
     const time_diff = end_time - start_time;
 
-    fill_result_time(time_diff);
+    fillResultTime(time_diff);
 
     const sign_per_minute = Math.round(text.length / (time_diff / SECOND / MINUTE));
     const sign_per_minute_el = document.getElementById("result_spm");
@@ -149,11 +149,7 @@ function end_type() {
     );
 }
 
-function restart() {
-    fill_typing();
-}
-
-function fill_result_time(time_diff) {
+function fillResultTime(time_diff) {
     const time_el = document.getElementById("result_time");
 
     const hours = Math.floor(time_diff / SECOND / MINUTE / HOUR);
@@ -169,4 +165,9 @@ function fill_result_time(time_diff) {
     }
 }
 
-wait_data();
+
+function restart() {
+    fillTyping();
+}
+
+waitData();

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Вход / Регистрация</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header>
+    mytype
+    <button class="menu-button" onclick="toggleMenu();">Меню</button>
+    <div class="dropdown-content" id="dropdownMenu">
+        <a href="http://localhost:8080">Главная</a>
+        <a href="http://localhost:8080/add">Добавить текст</a>
+        <button disabled>Выход</button>
+    </div>
+</header>
+
+<div class="center-container">
+    <div class="log-reg">
+        <h2 id="formTitle">Вход</h2>
+
+        <!-- Форма входа -->
+        <form id="loginForm" class="active">
+            <input type="text" placeholder="Имя пользователя" required/>
+            <input type="password" placeholder="Пароль" required/>
+            <button type="submit">Войти</button>
+        </form>
+
+        <!-- Форма регистрации -->
+        <form id="registerForm">
+            <input type="text" placeholder="Имя пользователя" required/>
+            <input type="email" placeholder="Email" required/>
+            <input type="password" placeholder="Пароль" required/>
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+
+        <div class="switch">
+            <span id="switchText">Нет аккаунта? <a id="switchLink">Зарегистрироваться</a></span>
+        </div>
+    </div>
+</div>
+
+<footer>
+    Контакты: venya2005@email.com
+</footer>
+
+<script src="../js/menu-control.js"></script>
+<script>
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const switchLink = document.getElementById("switchLink");
+    const switchText = document.getElementById("switchText");
+    const formTitle = document.getElementById("formTitle");
+
+    switchLink.addEventListener("click", () => {
+        if (loginForm.classList.contains("active")) {
+            loginForm.classList.remove("active");
+            registerForm.classList.add("active");
+            formTitle.textContent = "Регистрация";
+            switchText.innerHTML = 'Уже есть аккаунт? <a id="switchLink">Войти</a>';
+        } else {
+            registerForm.classList.remove("active");
+            loginForm.classList.add("active");
+            formTitle.textContent = "Вход";
+            switchText.innerHTML = 'Нет аккаунта? <a id="switchLink">Зарегистрироваться</a>';
+        }
+        // Повторно назначить обработчик (перерисовка)
+        document.getElementById("switchLink").addEventListener("click", () => switchLink.click());
+    });
+</script>
+</body>
+</html>

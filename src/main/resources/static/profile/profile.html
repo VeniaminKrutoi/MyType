@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyType. Профиль</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header>
+    mytype
+    <button class="menu-button" onclick="toggleMenu();">Меню</button>
+    <div class="dropdown-content" id="dropdownMenu">
+        <a href="http://localhost:8080">Главная</a>
+        <a href="http://localhost:8080/add">Добавить текст</a>
+        <button disabled>Выход</button>
+    </div>
+</header>
+
+<div class="info">
+    <h1>Профиль</h1>
+    <div class="profile">
+        <div>
+            <div class="profile-name">Имя пользователя: <span id="username">Иван Иванов</span></div>
+            <button class=change_buttons onclick="editUsername()">Изменить имя</button>
+        </div>
+
+        <div>
+            <div class="profile-email">Почта: <span id="email">ivan@example.com</span></div>
+            <button class=change_buttons onclick="editEmail()">Изменить почту</button>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-number">4321</div>
+            <div class="stat-label">Среднее количество знаков</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">123</div>
+            <div class="stat-label">Часов проведено</div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    Контакты: venya2005@email.com
+</footer>
+
+<script src="../js/menu-control.js"></script>
+<script src="../js/editUser.js"></script>
+
+</body>
+</html>

@@ -5,14 +5,13 @@ import com.example.mytype.service.Service;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:63342")
-public class Controller {
+public class IndexController {
     private final Service service;
 
     @PostMapping
