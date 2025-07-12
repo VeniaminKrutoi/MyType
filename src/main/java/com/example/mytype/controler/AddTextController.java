@@ -1,8 +1,8 @@
 package com.example.mytype.controler;
 
-import com.example.mytype.service.Service;
+import com.example.mytype.service.text.TextServ;
+import com.example.mytype.service.text.TextService;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:63342")
 public class AddTextController {
-    private final Service service;
+    private final TextService service;
 
     @PostMapping
     public String add(@RequestBody Map<String, String> data) {

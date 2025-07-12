@@ -2,7 +2,6 @@ package com.example.mytype.controler;
 
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -16,11 +15,16 @@ public class PageController {
 
     @GetMapping("/add")
     public String add() {
-        return "forward:/add-text.html";
+        return "forward:/addText.html";
     }
 
     @GetMapping("/profile")
     public String profile() {
         return "forward:/profile/profile.html";
+    }
+
+    @GetMapping("/profile/login")
+    public String login() {
+        return "forward:/profile/logReg.html";
     }
 }

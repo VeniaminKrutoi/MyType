@@ -16,7 +16,6 @@ public class TypeText {
     public static final int AUTHOR_LEN = 256;
     public static final int SOURCE_LINK_LEN = 256;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,6 +32,9 @@ public class TypeText {
     @Column(length = SOURCE_LINK_LEN)
     private String sourceLink;
 
+//    @Column(nullable = false)
+    private boolean checked;
+
     public TypeText() {
 
     }
@@ -44,6 +46,7 @@ public class TypeText {
         map.put("text", text);
         map.put("author", author);
         map.put("sourceLink", sourceLink);
+        map.put("checked", checked);
         return map;
     }
 }

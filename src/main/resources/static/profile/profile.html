@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>MyType. Профиль</title>
     <link rel="stylesheet" href="../styles.css">
+    <script src="../js/profileConnection.js"> checkUser()</script>
+    <script src="../js/notificationMenu.js"></script>
 </head>
 <body>
 <header>
@@ -12,7 +14,7 @@
     <div class="dropdown-content" id="dropdownMenu">
         <a href="http://localhost:8080">Главная</a>
         <a href="http://localhost:8080/add">Добавить текст</a>
-        <button disabled>Выход</button>
+        <button disabled onclick="closeProfile();">Выход</button>
     </div>
 </header>
 
@@ -20,7 +22,7 @@
     <h1>Профиль</h1>
     <div class="profile">
         <div>
-            <div class="profile-name">Имя пользователя: <span id="username">Иван Иванов</span></div>
+            <div class="profile-name">Имя пользователя: <span id="username"></span></div>
             <button class=change_buttons onclick="editUsername()">Изменить имя</button>
         </div>
 
@@ -46,8 +48,8 @@
     Контакты: venya2005@email.com
 </footer>
 
-<script src="../js/menu-control.js"></script>
-<script src="../js/editUser.js"></script>
+<script src="../js/menuControl.js"></script>
+<script src="../js/editUser.js">getUserInfo();</script>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.example.mytype.service;
+package com.example.mytype.service.text;
 
 import com.example.mytype.model.TypeText;
 import com.example.mytype.repository.TypeTextRep;
@@ -10,16 +10,16 @@ import java.util.Map;
 
 @org.springframework.stereotype.Service
 @AllArgsConstructor
-public class TextService implements Service {
+public class TextService implements TextServ {
     private final TypeTextRep repository;
 
     @Override
-    public List<TypeText> findAllTexts() {
+    public List<TypeText> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public TypeText getById(Long id) {
+    public TypeText findById(Long id) {
         return repository.getReferenceById(id);
     }
 
@@ -28,19 +28,22 @@ public class TextService implements Service {
         return repository.findByText(text);
     }
 
-    public long getTextCount() {
-        try {
-            long a = repository.count();
-            System.out.println(a);
-            return a;
-        } catch (Exception ex) {
-            return -1;
-        }
+    public long count() {
+        return repository.count();
     }
 
     @Override
-    public TypeText getByIndex(long index) {
-        return repository.getByIndex(index);
+    public List<TypeText> findFromTo(long from, long to) {
+        if (from > to || to <= 0) {
+            return List.of();
+        }
+
+        return repository.findFromTo(from, to);
+    }
+
+    @Override
+    public TypeText findByIndex(long index) {
+        return repository.findByIndex(index);
     }
 
     @Override
@@ -98,11 +101,11 @@ public class TextService implements Service {
         return "success";
     }
 
-    private boolean infoExist(Map<String, String> data, String str) {
-        return data.containsKey(str) && data.get(str) != null && !data.get(str).isEmpty();
+    private boolean infoExist(Map<String, String> data, String key) {
+        return data.containsKey(key) && data.get(key) != null && !data.get(key).isEmpty();
     }
 
-    private boolean tooBig(String str, int len) {
-        return str.length() > len;
+    private boolean tooBig(String value, int len) {
+        return value.length() > len;
     }
 }

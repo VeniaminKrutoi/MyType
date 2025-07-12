@@ -36,9 +36,6 @@ document.addEventListener("keypress", function (event) {
 
 const type = document.getElementById("type");
 
-// const data = {"text": "12345", "author": "я", "sourceLink": "youtube.com"}
-// setData(data);
-
 function waitData() {
     waiting = true;
     window.dataPromise.then(data => {

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Вход / Регистрация</title>
     <link rel="stylesheet" href="../styles.css">
+    <script src="../js/notificationMenu.js"></script>
+    <script src="../js/cookie.js"></script>
 </head>
 <body>
 <header>
@@ -13,7 +15,7 @@
     <div class="dropdown-content" id="dropdownMenu">
         <a href="http://localhost:8080">Главная</a>
         <a href="http://localhost:8080/add">Добавить текст</a>
-        <button disabled>Выход</button>
+        <button disabled id="exitButton">Выход</button>
     </div>
 </header>
 
@@ -21,18 +23,16 @@
     <div class="log-reg">
         <h2 id="formTitle">Вход</h2>
 
-        <!-- Форма входа -->
         <form id="loginForm" class="active">
-            <input type="text" placeholder="Имя пользователя" required/>
-            <input type="password" placeholder="Пароль" required/>
+            <input type="text" id="emailLog" placeholder="Имя пользователя" required/>
+            <input type="password" id="passwordLog" placeholder="Пароль" required/>
             <button type="submit">Войти</button>
         </form>
 
-        <!-- Форма регистрации -->
         <form id="registerForm">
-            <input type="text" placeholder="Имя пользователя" required/>
-            <input type="email" placeholder="Email" required/>
-            <input type="password" placeholder="Пароль" required/>
+            <input type="text" id="userNameReg" placeholder="Имя пользователя" required/>
+            <input type="email" id="emailReg" placeholder="Email" required/>
+            <input type="password" id="passwordReg" placeholder="Пароль" required/>
             <button type="submit">Зарегистрироваться</button>
         </form>
 
@@ -46,7 +46,7 @@
     Контакты: venya2005@email.com
 </footer>
 
-<script src="../js/menu-control.js"></script>
+<script src="../js/menuControl.js"></script>
 <script>
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
@@ -70,5 +70,8 @@
         document.getElementById("switchLink").addEventListener("click", () => switchLink.click());
     });
 </script>
+<script src="../js/logRegConnection.js"></script>
+
+<div id="notifications" style="position: fixed; top: 80px; left:30px; z-index: 9999;"></div>
 </body>
 </html>
