@@ -7,12 +7,10 @@ function showNotification(message, type = 'success') {
 
     container.appendChild(notification);
 
-    // Включаем анимацию появления
     setTimeout(() => {
         notification.classList.add('show');
     }, 10);
 
-    // Удаляем через 5 секунд с анимацией ухода
     setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => container.removeChild(notification), 500);

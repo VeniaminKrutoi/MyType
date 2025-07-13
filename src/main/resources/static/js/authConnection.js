@@ -39,7 +39,7 @@ document.getElementById("registerForm")
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("Не удалось подключиться к серверу");
+                        throw new Error(response.body.toString());
                     }
                     return response.text();
                 })
@@ -90,7 +90,7 @@ document.getElementById("loginForm")
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("Не удалось подключиться к серверу");
+                        throw new Error(response.body.toString());
                     }
                     return response.text();
                 })

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>MyType. Профиль</title>
     <link rel="stylesheet" href="../styles.css">
-    <script src="../js/profileConnection.js"> checkUser()</script>
+    <script src="../js/profileConnection.js"> checkUser();</script>
     <script src="../js/notificationMenu.js"></script>
+    <script src="../js/cookie.js"></script>
 </head>
 <body>
 <header>
@@ -19,29 +20,41 @@
 </header>
 
 <div class="info">
-    <h1>Профиль</h1>
-    <div class="profile">
+    <div class="uploading" id="uploading">
+        <p>Загрузка</p>
+    </div>
+
+    <div class="error-button">
+        <button id="errorButton" onclick="getUserData()">
+            Проблема с подключением. Попробуйте еще раз.
+        </button>
+    </div>
+
+    <div class="profile" id="profile">
+        <h1>Профиль</h1>
         <div>
             <div class="profile-name">Имя пользователя: <span id="username"></span></div>
             <button class=change_buttons onclick="editUsername()">Изменить имя</button>
         </div>
 
         <div>
-            <div class="profile-email">Почта: <span id="email">ivan@example.com</span></div>
+            <div class="profile-email">Почта: <span id="email"></span></div>
             <button class=change_buttons onclick="editEmail()">Изменить почту</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="spm"></div>
+                <div class="stat-label">Среднее количество знаков</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="time"></div>
+                <div class="stat-label">Часов проведено</div>
+            </div>
         </div>
     </div>
 
-    <div class="stats">
-        <div class="stat">
-            <div class="stat-number">4321</div>
-            <div class="stat-label">Среднее количество знаков</div>
-        </div>
-        <div class="stat">
-            <div class="stat-number">123</div>
-            <div class="stat-label">Часов проведено</div>
-        </div>
-    </div>
+
 </div>
 
 <footer>
@@ -49,7 +62,9 @@
 </footer>
 
 <script src="../js/menuControl.js"></script>
-<script src="../js/editUser.js">getUserInfo();</script>
+<script src="../js/editUser.js"></script>
+<script> getUserData()</script>
 
+<div id="notifications" style="position: fixed; top: 80px; left:30px; z-index: 9999;"></div>
 </body>
 </html>

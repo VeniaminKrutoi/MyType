@@ -15,3 +15,20 @@ function checkUser(){
         exitButton.disabled = false;
     }
 }
+
+function getEmail() {
+    const cookie = document.cookie;
+
+    if (!cookie.includes("user=")) {
+        return null;
+    }
+
+    const index = cookie.indexOf("user=");
+    const valueAndOther = document.cookie.substring(index + 5);
+
+    if (!valueAndOther.includes(";")) {
+        return valueAndOther;
+    }
+
+    return valueAndOther.substring(0, valueAndOther.indexOf(";"));
+}

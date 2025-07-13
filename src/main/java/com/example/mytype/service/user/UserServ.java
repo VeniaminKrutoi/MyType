@@ -1,6 +1,7 @@
 package com.example.mytype.service.user;
 
 import com.example.mytype.model.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,8 @@ public interface UserServ {
     long count();
     List<User> findFromTo(long from, long to);
     User findByIndex(long index);
-    String save(Map<String, String> data);
+    ResponseEntity<String> save(Map<String, String> data);
     User findByEmail(String email);
-    String checkEmailAndPassword(Map<String, String> data);
+    void checkEmailAndPassword(Map<String, String> data);
+    User findByUsername(String username);
 }

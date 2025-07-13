@@ -23,8 +23,8 @@ public class PageController {
         return "forward:/profile/profile.html";
     }
 
-    @GetMapping("/profile/login")
+    @GetMapping("/profile/auth")
     public String login() {
-        return "forward:/profile/logReg.html";
+        return "forward:/profile/auth.html";
     }
 }

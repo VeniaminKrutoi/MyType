@@ -18,10 +18,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(length = USERNAME_LEN)
+    @Column(unique = true, nullable = false, length = USERNAME_LEN)
     private String username;
 
-    @Column(unique = true, nullable = false, length = 64)
+    @Column(unique = true, nullable = false, length = EMAIL_LEN)
     private String email;
 
     @Column(length = PASSWORD_LEN)
@@ -32,5 +32,5 @@ public class User {
     private Long time;
 
     @Column(nullable = false)
-    private boolean admin;
+    private String role;
 }

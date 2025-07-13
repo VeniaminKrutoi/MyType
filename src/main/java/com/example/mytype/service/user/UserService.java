@@ -1,8 +1,13 @@
 package com.example.mytype.service.user;
 
+import com.example.mytype.exceptions.EmptyDataException;
+import com.example.mytype.exceptions.TooBigException;
+import com.example.mytype.exceptions.UserNotFoundException;
+import com.example.mytype.exceptions.WrongDataException;
 import com.example.mytype.model.User;
 import com.example.mytype.repository.UserRep;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -45,47 +50,48 @@ public class UserService implements UserServ {
     }
 
     @Override
-    public String save(Map<String, String> data) {
+    public ResponseEntity<String> save(Map<String, String> data) {
         User user = new User();
 
         if (dataEmpty(data, "username")) {
-            return "Имя не должно быть пустое";
+            throw new EmptyDataException("пользователь");
         }
 
         final String username = data.get("username");
 
         if (tooBig(username, User.USERNAME_LEN)) {
-            return "Имя слишком длинное";
+            throw new TooBigException("пользователь", User.USERNAME_LEN);
         }
 
         if (dataEmpty(data, "email")) {
-            return "Почта не должна быть пустой";
+            throw new EmptyDataException("почта");
         }
 
         final String email = data.get("email");
 
         if (tooBig(username, User.EMAIL_LEN)) {
-            return "Почта слишком длинная";
+            throw new TooBigException("почта", User.EMAIL_LEN);
         }
 
         if (dataEmpty(data, "password")) {
-            return "Пароль не должен быть пустым";
+            throw new EmptyDataException("пароль");
         }
 
         final String password = data.get("password");
 
         if (tooBig(username, User.PASSWORD_LEN)) {
-            return "Пароль слишком длинный";
+            throw new TooBigException("пароль", User.PASSWORD_LEN);
         }
 
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
         user.setTime(0L);
+        user.setRole("USER");
 
         repository.save(user);
 
-        return "success";
+        return ResponseEntity.ok().build();
     }
 
     @Override
@@ -94,21 +100,24 @@ public class UserService implements UserServ {
     }
 
     @Override
-    public String checkEmailAndPassword(Map<String, String> data) {
+    public void checkEmailAndPassword(Map<String, String> data) {
         final String email = data.get("email");
         final String password = data.get("password");
 
         User user = repository.findByEmail(email);
 
         if (user == null) {
-            return "Такого пользователя не существует";
+            throw new UserNotFoundException(email);
         }
 
         if (!user.getPassword().equals(password)) {
-            return "Неверный пароль";
+            throw new WrongDataException("пароль");
         }
+    }
 
-        return "success";
+    @Override
+    public User findByUsername(String username) {
+        return repository.findByUsername(username);
     }
 
     private static boolean dataEmpty(Map<String, String> data, String key) {
