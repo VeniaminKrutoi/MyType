@@ -17,7 +17,7 @@ public class TypeText {
     public static final int SOURCE_LINK_LEN = 256;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = TITLE_LEN)

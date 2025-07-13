@@ -1,52 +1,91 @@
 package com.example.mytype.controler;
 
+import com.example.mytype.exceptions.SessionNotFoundException;
 import com.example.mytype.exceptions.UserNotFoundException;
+import com.example.mytype.exceptions.WrongDataException;
 import com.example.mytype.service.user.UserService;
 import com.example.mytype.model.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/users")
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:63342")
 public class profileController {
     private UserService service;
 
-    @PostMapping("/register")
-    public ResponseEntity<String> regUser(@RequestBody Map<String, String> user, HttpSession session) {
-        session.setAttribute("user", user.get("username"));
-        return service.save(user);
-    }
-
-    @PostMapping("/login")
-    public void logUser(@RequestBody Map<String, String> user, HttpSession session) {
-        service.checkEmailAndPassword(user);
-        session.setAttribute("user", user.get("username"));
-    }
-
-    @GetMapping("/me")
-    public User getUser(HttpSession session) {
-        if (session.getAttribute("user") != null) {
-            throw new UserNotFoundException("пользователь");
-        }
-
-        User user = service.findByUsername(session.getAttribute("user").toString());
-
-        if  (user == null) {
-            throw new UserNotFoundException("пользователь");
-        }
-
-        return user;
-    }
-
     @PostMapping
-    public Map<String, Object> updateUser(@RequestBody Map<String, String> data) {
-        return Map.of();
+    public User regUser(HttpSession session, @RequestBody Map<String, String> user) {
+        User createdUser = service.save(user);
+
+        session.setAttribute("userId", createdUser.getId());
+        System.out.println(createdUser);
+        return createdUser;
+    }
+
+    @GetMapping
+    public List<User> getAllUsers(HttpSession session) {
+        return service.findAll()
+                .stream()
+                .peek(user -> user.setEmail(null))
+                .peek(user -> user.setPassword(null))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(HttpSession session, @PathVariable String id) {
+        try {
+            User user = service.findById((Long.parseLong(id)));
+
+            if (user == null) {
+                throw new UserNotFoundException("пользователь");
+            }
+
+            if (session.getAttribute("userId") == null || !session.getAttribute("userId").toString().equals(id)) {
+                user.setEmail(null);
+                user.setPassword(null);
+            }
+
+            return user;
+        } catch (NumberFormatException e) {
+            throw new WrongDataException("Неверный id");
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public User updateUser(
+            HttpSession session,
+            @PathVariable String id,
+            @RequestBody Map<String, String> data
+    ) {
+        if (session.getAttribute("userId") == null) {
+            throw new SessionNotFoundException(session.getId(), "пользователь");
+        }
+
+        if (!session.getAttribute("userId").toString().equals(id)) {
+            throw new SessionNotFoundException(session.getId(), "пользователь сессии не равен пользователю клиента");
+        }
+
+        return service.update((Long) session.getAttribute("userId"), data);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(HttpSession session, @PathVariable String id) {
+        if (session.getAttribute("userId") == null) {
+            throw new SessionNotFoundException(session.getId(), "пользователь");
+        }
+
+        if (!session.getAttribute("userId").toString().equals(id)) {
+            throw new SessionNotFoundException(session.getId(), "пользователь сессии не равен пользователю клиента");
+        }
+
+        service.delete((Long) session.getAttribute("userId"));
+        session.removeAttribute("userId");
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface UserRep extends JpaRepository<User, Long> {
-//    User findById(long id);
+    User findById(long id);
     User findByEmail(String email);
     User findByUsername(String username);
 

@@ -7,7 +7,6 @@ import com.example.mytype.exceptions.WrongDataException;
 import com.example.mytype.model.User;
 import com.example.mytype.repository.UserRep;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class UserService implements UserServ {
 
     @Override
     public User findById(long id) {
-        return repository.getReferenceById(id);
+        return repository.findById(id);
     }
 
     @Override
@@ -34,7 +33,7 @@ public class UserService implements UserServ {
     @Override
     public List<User> findFromTo(long from, long to) {
         if (from > to || to <= 0) {
-            return List.of();
+            throw new WrongDataException("индекс начала или индекс конца");
         }
 
         return repository.findFromTo(from, to);
@@ -43,55 +42,26 @@ public class UserService implements UserServ {
     @Override
     public User findByIndex(long index) {
         if (index < 0 || index >= count()) {
-            return null;
+            throw new WrongDataException("индекс");
         }
 
         return repository.findByIndex(index);
     }
 
     @Override
-    public ResponseEntity<String> save(Map<String, String> data) {
+    public User save(Map<String, String> data) {
+        checkExceptions(data, "username", User.USERNAME_LEN, "пользователь");
+        checkExceptions(data, "email", User.EMAIL_LEN, "почта");
+        checkExceptions(data, "password", User.PASSWORD_LEN, "пароль");
+
         User user = new User();
-
-        if (dataEmpty(data, "username")) {
-            throw new EmptyDataException("пользователь");
-        }
-
-        final String username = data.get("username");
-
-        if (tooBig(username, User.USERNAME_LEN)) {
-            throw new TooBigException("пользователь", User.USERNAME_LEN);
-        }
-
-        if (dataEmpty(data, "email")) {
-            throw new EmptyDataException("почта");
-        }
-
-        final String email = data.get("email");
-
-        if (tooBig(username, User.EMAIL_LEN)) {
-            throw new TooBigException("почта", User.EMAIL_LEN);
-        }
-
-        if (dataEmpty(data, "password")) {
-            throw new EmptyDataException("пароль");
-        }
-
-        final String password = data.get("password");
-
-        if (tooBig(username, User.PASSWORD_LEN)) {
-            throw new TooBigException("пароль", User.PASSWORD_LEN);
-        }
-
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(password);
+        user.setUsername(data.get("username"));
+        user.setEmail(data.get("email"));
+        user.setPassword(data.get("password"));
         user.setTime(0L);
         user.setRole("USER");
 
-        repository.save(user);
-
-        return ResponseEntity.ok().build();
+        return repository.save(user);
     }
 
     @Override
@@ -100,7 +70,7 @@ public class UserService implements UserServ {
     }
 
     @Override
-    public void checkEmailAndPassword(Map<String, String> data) {
+    public User checkEmailAndPassword(Map<String, String> data) {
         final String email = data.get("email");
         final String password = data.get("password");
 
@@ -113,11 +83,78 @@ public class UserService implements UserServ {
         if (!user.getPassword().equals(password)) {
             throw new WrongDataException("пароль");
         }
+
+        return user;
     }
 
     @Override
     public User findByUsername(String username) {
         return repository.findByUsername(username);
+    }
+
+    @Override
+    public User update(Long id, Map<String, String> data) {
+        User user = repository.findById(id).orElse(null);
+
+        if (user == null) {
+            throw new UserNotFoundException(data.get("username"));
+        }
+
+        if (existAndNotTooBigException(data, "username", User.USERNAME_LEN, "пользователь")) {
+            if (repository.findByUsername(data.get("username")) != null) {
+                throw new WrongDataException("Пользователь с таким именем уже существует");
+            }
+            user.setUsername(data.get("username"));
+        }
+
+        if (existAndNotTooBigException(data, "email", User.EMAIL_LEN, "почта")) {
+            if (repository.findByEmail(data.get("email")) != null) {
+                throw new WrongDataException("Пользователь с такой почтой уже существует");
+            }
+            user.setEmail(data.get("email"));
+        }
+
+        if (existAndNotTooBigException(data, "password", User.PASSWORD_LEN, "пароль")) {
+            user.setPassword(data.get("password"));
+        }
+
+        return repository.save(user);
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (repository.findById(id).orElse(null) == null) {
+            throw new WrongDataException("id");
+        }
+
+        repository.deleteById(id);
+    }
+
+    private static boolean existAndNotTooBigException(
+            Map<String, String> data,
+            String attribute,
+            int attLen,
+            String errorMessage
+    ) {
+        if (dataEmpty(data, attribute)) {
+            return false;
+        }
+
+        if (tooBig(data.get(attribute), attLen)) {
+            throw new TooBigException(errorMessage, attLen);
+        }
+
+        return true;
+    }
+
+    private static void checkExceptions(Map<String, String> data, String attribute, int attLen, String errorMessage) {
+        if (dataEmpty(data, attribute)) {
+            throw new EmptyDataException(errorMessage);
+        }
+
+        if (tooBig(data.get(attribute), attLen)) {
+            throw new TooBigException(errorMessage, attLen);
+        }
     }
 
     private static boolean dataEmpty(Map<String, String> data, String key) {

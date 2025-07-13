@@ -46,7 +46,7 @@ header {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    font-size:20px;
+    font-size: 20px;
 }
 
 .dropdown-content button {
@@ -55,10 +55,10 @@ header {
     text-decoration: none;
     display: block;
     border: none;
-    background-color:transparent;
-    font-size:20px;
+    background-color: transparent;
+    font-size: 20px;
     color: #898989;
-    width:100%;
+    width: 100%;
 }
 
 .dropdown-content a:hover {
@@ -93,7 +93,7 @@ header {
 }
 
 .uploading {
-    position:absolute;
+    position: absolute;
 }
 
 .uploading p {
@@ -102,7 +102,7 @@ header {
 }
 
 .error-button {
-    position:absolute;
+    position: absolute;
     visibility: hidden;
     margin: 10vw;
 }
@@ -272,7 +272,7 @@ footer {
     font-weight: bold;
 }
 
-.add-text input[type="text"]{
+.add-text input[type="text"] {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -301,7 +301,7 @@ footer {
     transform: translateX(-100%);
     transition: all 0.5s ease;
     min-width: 200px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     font-size: 0.95em;
 }
 
@@ -349,7 +349,7 @@ footer {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.profile div{
+.profile div {
     display: flex;
     justify-content: left;
     gap: 10px;
@@ -367,7 +367,8 @@ footer {
 
 
 .profile-name,
-.profile-email {
+.profile-email,
+.profile-password {
     font-size: 20px;
     color: #222;
 }
@@ -423,6 +424,7 @@ footer {
     width: 300px;
     align-self: center;
 }
+
 .log-reg h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -472,3 +474,30 @@ footer {
 .switch a:hover {
     text-decoration: underline;
 }
+
+.close-button {
+    gap: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right:auto;
+}
+
+.delete-button {
+    gap: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left:auto;
+}
+

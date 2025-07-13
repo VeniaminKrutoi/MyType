@@ -30,7 +30,7 @@ document.getElementById("registerForm")
                 password: password
             }
 
-            fetch("http://localhost:8080/profile/register", {
+            fetch("http://localhost:8080/users", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,21 +38,17 @@ document.getElementById("registerForm")
                 body: JSON.stringify(data)
             })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error(response.body.toString());
+                        if (!response.ok) {
+                            return response.text();
+                        }
+
+                        return response.json();
                     }
-                    return response.text();
-                })
-                .then(data => {
-                    if (data === "success") {
-                        connectionSuccess("Аккаунт создан. Добро пожаловать!");
-                        addCookie("user", email);
-                        window.location.href = "http://localhost:8080/profile";
-                    } else {
-                        connectionFail(data)
-                    }
-                })
-                .catch(error => connectionFail(error.message));
+                )
+                .then(data => typeof data === 'string' ?
+                    connectionFail(data) :
+                    connectionSuccess("Аккаунт создан. Добро пожаловать!", data)
+                );
         }
     );
 
@@ -81,7 +77,7 @@ document.getElementById("loginForm")
                 password: password
             }
 
-            fetch("http://localhost:8080/profile/login", {
+            fetch("http://localhost:8080/login", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -90,26 +86,23 @@ document.getElementById("loginForm")
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(response.body.toString());
+                        return response.text();
                     }
-                    return response.text();
+                    return response.json();
                 })
-                .then(data => {
-                    if (data === "success") {
-                        connectionSuccess("Добро пожаловать!");
-                        addCookie("user", email);
-                        window.location.href = "http://localhost:8080/profile";
-                    } else {
-                        connectionFail(data)
-                    }
-                })
-                .catch(error => connectionFail(error.message));
+                .then(data => typeof data === 'string' ?
+                    connectionFail(data) :
+                    connectionSuccess("Добро пожаловать!", data)
+                );
         }
     );
 
-function connectionSuccess(text) {
+function connectionSuccess(text, user) {
+    addCookie("id", user['id']);
+
     console.log("success");
-    showNotification(text)
+    showNotification(text);
+    setTimeout(window.location.href = `http://localhost:8080/profile/${user['id']}`, 1000);
 }
 
 function connectionFail(error) {

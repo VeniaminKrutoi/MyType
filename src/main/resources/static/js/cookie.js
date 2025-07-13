@@ -7,24 +7,29 @@ function addCookie(key, value) {
     document.cookie = `${encodeKey}=${encodeValue}; path=/`;
 }
 
-function checkUser(){
-    if (document.cookie.includes("user")) {
+function checkId(){
+    if (document.cookie.includes("id=")) {
         const exitButton = document.getElementById("exitButton");
 
         exitButton.style.color = "black";
         exitButton.disabled = false;
+
+        return true;
     }
+
+    return false;
 }
 
-function getEmail() {
+function getValue(key) {
     const cookie = document.cookie;
+    const keyString = key + "=";
 
-    if (!cookie.includes("user=")) {
+    if (!cookie.includes(keyString)) {
         return null;
     }
 
-    const index = cookie.indexOf("user=");
-    const valueAndOther = document.cookie.substring(index + 5);
+    const index = cookie.indexOf(keyString);
+    const valueAndOther = document.cookie.substring(index + keyString.length);
 
     if (!valueAndOther.includes(";")) {
         return valueAndOther;
