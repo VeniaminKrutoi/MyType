@@ -13,7 +13,7 @@ public interface TypeTextRep extends JpaRepository<TypeText, Long> {
     @Query(value = "SELECT * FROM type_text ORDER BY id LIMIT 1 OFFSET :index", nativeQuery = true)
     TypeText findByIndex(@Param("index") long index);
 
-    @Query(value = "SELECT * FROM type_text ORDER BY id LIMIT to - from OFFSET :from", nativeQuery = true)
+    @Query(value = "SELECT * FROM type_text ORDER BY id LIMIT :to - :from OFFSET :from", nativeQuery = true)
     List<TypeText> findFromTo(@Param("from") long from, @Param("to") long to);
 
     @Query(value = "SELECT * FROM type_text WHERE checked = :check", nativeQuery = true)

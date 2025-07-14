@@ -95,15 +95,23 @@ function startType() {
 
 function endType() {
     finished = true;
-
     const end_time = Date.now()
     const time_diff = end_time - start_time;
+
 
     fillResultTime(time_diff);
 
     const sign_per_minute = Math.round(text.length / (time_diff / SECOND / MINUTE));
     const sign_per_minute_el = document.getElementById("result_spm");
     sign_per_minute_el.textContent = sign_per_minute.toString();
+
+    const data = {
+        typeResults:sign_per_minute,
+        typeCount:1,
+        time:time_diff
+    }
+
+    sendInfo(data);
 
     const accuracy = 100 - Math.round((error_count / text.length) * 100);
     const accuracy_el = document.getElementById("result_accuracy")
@@ -123,6 +131,8 @@ function endType() {
         },
         SECOND
     );
+
+
 }
 
 function fillResultTime(time_diff) {

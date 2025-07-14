@@ -5,12 +5,10 @@
     <title>MyType. Профиль</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
 
-    <script th:unless="${user.own}" th:inline="javascript">function getValue(id) {
-        return /*[[${user.id}]]*/ id;
-    }</script>
+    <script th:inline="javascript">const user = /*[[${user}]]*/ null</script>
     <script th:src="@{/js/cookie.js}"></script>
     <script th:src="@{/js/connections/profileConnection.js}"></script>
-    <script th:src="@{/js/controls/profileControl.js}"></script>
+    <script th:if="${user.own}" th:src="@{/js/controls/profileControl.js}"></script>
 </head>
 <body>
 <header>
@@ -67,9 +65,13 @@
             </div>
         </div>
 
-        <div th:if="${user.own}">
-            <button class="close-button" onclick="closeUser()">Выйти из профиля</button>
+        <div th:if="${user.own || user.admin}">
+            <button th:if="${user.own}" class="close-button" onclick="closeUser()">Выйти из профиля</button>
             <button class="delete-button" onclick="deleteUser()">Удалить профиль</button>
+        </div>
+
+        <div th:if="${user.own && user.admin}">
+            <button> Проверить новые тексты</button>
         </div>
     </div>
 

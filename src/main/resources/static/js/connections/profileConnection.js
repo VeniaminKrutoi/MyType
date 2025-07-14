@@ -1,24 +1,7 @@
-function getUserData() {
-    const errorButtonEl = document.getElementById("errorButton");
-    const profileEl = document.getElementById("profile");
-    const uploadingEl = document.getElementById("uploading");
-    errorButtonEl.style.visibility = "hidden";
-    profileEl.style.visibility = "hidden";
-    uploadingEl.style.visibility = "visible";
-
-    fetch(`http://localhost:8080/users/${getValue("id")}`, {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(async response => {
-            if (!response.ok) {
-                return response.text()
-            }
-            return response.json();
-        })
-        .then(data => typeof data === 'string' ? connectionFail(data) : connectionSuccess(data));
+if (user === null) {
+    connectionFail("Проблемы на сервере");
+} else {
+    connectionSuccess(user);
 }
 
 function connectionSuccess(data) {

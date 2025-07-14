@@ -12,10 +12,10 @@ public interface UserRep extends JpaRepository<User, Long> {
     User findByEmail(String email);
     User findByUsername(String username);
 
-    @Query(value = "SELECT * FROM type_text ORDER BY id LIMIT 1 OFFSET :index", nativeQuery = true)
+    @Query(value = "SELECT * FROM users ORDER BY id LIMIT 1 OFFSET :index", nativeQuery = true)
     User findByIndex(@Param("index") long index);
 
-    @Query(value = "SELECT * FROM type_text ORDER BY id LIMIT to - from OFFSET :from", nativeQuery = true)
+    @Query(value = "SELECT * FROM users ORDER BY type_results DESC LIMIT :to - :from OFFSET :from", nativeQuery = true)
     List<User> findFromTo(@Param("from") long from, @Param("to") long to);
 
 

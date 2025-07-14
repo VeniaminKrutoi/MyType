@@ -60,7 +60,7 @@ public class TextService implements TextServ {
             return List.of();
         }
 
-        return repository.findFromTo(from, to);
+        return repository.findFromTo(from, to - from);
     }
 
     @Override

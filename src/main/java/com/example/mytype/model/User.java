@@ -27,7 +27,8 @@ public class User {
     @Column(length = PASSWORD_LEN)
     private String password;
 
-    private List<Integer> typeResults;
+    private Integer typeResults;
+    private Integer typeCount;
 
     private Long time;
 

@@ -8,6 +8,7 @@ import com.example.mytype.model.User;
 import com.example.mytype.repository.UserRep;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Map;
@@ -70,6 +71,8 @@ public class UserService implements UserServ {
         user.setEmail(data.get("email"));
         user.setPassword(data.get("password"));
         user.setTime(0L);
+        user.setTypeResults(0);
+        user.setTypeCount(0);
         user.setRole("USER");
 
         try {
@@ -131,6 +134,40 @@ public class UserService implements UserServ {
 
         if (existAndNotTooBigException(data, "password", User.PASSWORD_LEN, "пароль")) {
             user.setPassword(data.get("password"));
+        }
+
+        if (existAndNotTooBigException(data, "typeResults", 256, "Знаки в минуту")
+                && existAndNotTooBigException(data, "typeCount", 256, "Число испытаний")
+                && existAndNotTooBigException(data, "time", 256, "Время")) {
+            user.setTypeResults(Integer.parseInt(data.get("typeResults")));
+
+            Integer typeResult = user.getTypeResults();
+            if (typeResult == null) {
+                typeResult = 0;
+            }
+
+            Integer typeCount = user.getTypeCount();
+            if (typeCount == null) {
+                typeCount = 0;
+            }
+
+            Long  time = user.getTime();
+            if (time == null) {
+                time = 0L;
+            }
+
+            int newTypeCount = typeCount + Integer.parseInt(data.get("typeCount"));
+            int newTypeResult = ((typeResult * typeCount) + Integer.parseInt(data.get("typeResults")))
+                    / newTypeCount;
+            long newTime = time + Long.parseLong(data.get("time"));
+
+            user.setTypeResults(newTypeResult);
+            user.setTypeCount(newTypeCount);
+            user.setTime(newTime);
+        }
+
+        if (existAndNotTooBigException(data, "role", 256, "Роль")) {
+            user.setRole(data.get("role"));
         }
 
         return repository.save(user);

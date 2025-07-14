@@ -1,5 +1,7 @@
 package com.example.mytype.controler;
 
+import com.example.mytype.exceptions.SessionNotFoundException;
+import com.example.mytype.exceptions.WrongDataException;
 import com.example.mytype.model.TypeText;
 import com.example.mytype.model.User;
 import com.example.mytype.service.text.TextService;
@@ -42,6 +44,7 @@ public class HomeController {
     public User loginUser(HttpSession session, @RequestBody Map<String, String> user) {
         User loginUser = userService.checkEmailAndPassword(user);
         session.setAttribute("userId", loginUser.getId());
+        session.setAttribute("role", loginUser.getRole());
 
         System.out.println(session.getAttribute("userId"));
 
@@ -51,5 +54,18 @@ public class HomeController {
     @GetMapping("/close")
     public void closeSession(HttpSession session) {
         session.removeAttribute("userId");
+    }
+
+    @PostMapping("/save")
+    public User saveUserResults(HttpSession session, Map<String, String> data) {
+        if (session.getAttribute("userId") == null) {
+            throw new SessionNotFoundException(session.getId(), "пользователь");
+        }
+
+        try {
+            return userService.update((Long) session.getAttribute("userId"), data);
+        } catch (NumberFormatException e) {
+            throw new SessionNotFoundException(session.getId(), "Id не long");
+        }
     }
 }
