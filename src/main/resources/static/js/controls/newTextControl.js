@@ -1,6 +1,17 @@
-    const texts = ["НОВЫЙ ТЕКСТ", "ЕЩЁ ОДИН", "ДОБАВЛЕННЫЙ", "ТЕКСТ СЮДА"];
+function openMenu(text) {
+    document.getElementById("title").value = text["title"];
+    document.getElementById("author").value = text["author"];
+    document.getElementById("source").value = text["sourceLink"];
+    document.getElementById("text").value = text["text"];
 
-    function populateTable() {
+    document.getElementById('overlayMenu').style.display = 'block';
+}
+
+function closeMenu() {
+    document.getElementById('overlayMenu').style.display = 'none';
+}
+
+function populateTable() {
     const tbody = document.querySelector("table tbody");
     texts.forEach(text => {
     const row = document.createElement("tr");
@@ -8,13 +19,11 @@
     cell.textContent = text;
     cell.style.fontSize = "24px";
     cell.style.cursor = "pointer";
-    cell.onclick = openMenu;
+    cell.onclick = () => openMenu(text);
     row.appendChild(cell);
     tbody.appendChild(row);
     });
     }
-
-    // Вызовем populateTable при загрузке страницы
     window.onload = populateTable;
 
 function setValue(text) {

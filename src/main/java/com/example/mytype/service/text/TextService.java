@@ -96,7 +96,26 @@ public class TextService implements TextServ {
 
         setTitleAuthorSourceLink(data, text);
 
+        TypeText badText = repository.findByText(data.get("text"));
+
+        if (existAndNotTooBigException(data, "checked", 256, "флаг проверки")) {
+            if (badText != null) {
+                if (!badText.isChecked()) {
+                    delete(badText.getId());
+                    badText.setText(null);
+                } else {
+                    throw new WrongDataException("Такой текст уже есть");
+                }
+            }
+
+            text.setChecked(true);
+        }
+
         if (existAndNotTooBigException(data, "text", TypeText.TEXT_LEN, "текст")) {
+            if (badText != null) {
+                throw new WrongDataException("Такой текст уже есть");
+            }
+
             text.setText(data.get("text"));
         }
 

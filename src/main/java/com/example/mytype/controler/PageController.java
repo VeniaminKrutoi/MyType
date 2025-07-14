@@ -111,4 +111,15 @@ public class PageController {
         return "/leaderboard";
     }
 
+    @GetMapping("/save")
+    public String checkText(Model model, HttpSession session) {
+        if (!UsersController.isAdmin(session)) {
+            throw new WrongDataException("Недоступно");
+        }
+
+        model.addAttribute("text", textService.findAllByCheck(false));
+
+        return "/newTexts";
+    }
+
 }
