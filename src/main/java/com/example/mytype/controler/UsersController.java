@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:63342")
-public class profileController {
+public class UsersController {
     private UserService service;
 
     @PostMapping
@@ -29,13 +29,34 @@ public class profileController {
         return createdUser;
     }
 
+    @PostMapping("/count")
+    public Map<String, Long> countUsers() {
+        return Map.of("count", service.count());
+    }
+
     @GetMapping
-    public List<User> getAllUsers(HttpSession session) {
-        return service.findAll()
-                .stream()
-                .peek(user -> user.setEmail(null))
-                .peek(user -> user.setPassword(null))
-                .collect(Collectors.toList());
+    public List<User> getAllUsers(
+            HttpSession session,
+            @RequestParam(required = false) Long from,
+            @RequestParam(required = false) Long to
+    ) {
+        if (from == null && to == null) {
+            return service.findAll()
+                    .stream()
+                    .peek(user -> user.setEmail(null))
+                    .peek(user -> user.setPassword(null))
+                    .collect(Collectors.toList());
+        }
+
+        if (from == null) {
+            throw new WrongDataException("Неправильное начало");
+        }
+
+        if (to == null) {
+            throw new WrongDataException("Неправильный конец");
+        }
+
+        return service.findFromTo(from, to);
     }
 
     @GetMapping("/{id}")

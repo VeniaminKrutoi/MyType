@@ -15,4 +15,10 @@ public interface TypeTextRep extends JpaRepository<TypeText, Long> {
 
     @Query(value = "SELECT * FROM type_text ORDER BY id LIMIT to - from OFFSET :from", nativeQuery = true)
     List<TypeText> findFromTo(@Param("from") long from, @Param("to") long to);
+
+    @Query(value = "SELECT * FROM type_text WHERE checked = :check", nativeQuery = true)
+    List<TypeText> findAllByCheck(@Param("check") boolean checked);
+
+    @Query(value = "SELECT COUNT(*) FROM type_text WHERE checked = :check", nativeQuery = true)
+    long countAllByCheck(@Param("check") boolean checked);
 }

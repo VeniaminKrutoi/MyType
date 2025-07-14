@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Type. Таблмца лидеров</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    mytype
+    <button class="menu-button" onclick="toggleMenu();">Меню</button>
+    <div class="dropdown-content" id="dropdownMenu">
+        <a href="http://localhost:8080/profile">Профиль</a>
+        <a href="http://localhost:8080/add">Добавить текст</a>
+        <button disabled id="exitButton">Выход</button>
+    </div>
+</header>
+
+<div class="table-container">
+    <h2>Таблица лидеров</h2>
+
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Описание</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="pagination">
+        <button id="prevBtn">◀ Назад</button>
+        <span class="page-info">Страница <span id="currentPage">1</span> из <span id="totalPages">?</span></span>
+        <button id="nextBtn">Вперёд ▶</button>
+        <label>
+            Перейти к:
+            <input type="number" id="pageInput" min="1">
+        </label>
+        <button id="goToBtn">Перейти</button>
+    </div>
+
+</div>
+
+<footer>
+    Контакты: venya2005@email.com
+</footer>
+
+<div id="notifications" style="position: fixed; top: 80px; left:30px; z-index: 9999;"></div>
+
+<script src="js/controls/popUpMenusControl.js"></script>
+<script src="js/controls/leaderboardControl.js"></script>
+
+</body>
+</html>

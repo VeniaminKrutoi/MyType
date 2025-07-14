@@ -37,6 +37,7 @@ public class HomeController {
         }
     }
 
+
     @PostMapping("/login")
     public User loginUser(HttpSession session, @RequestBody Map<String, String> user) {
         User loginUser = userService.checkEmailAndPassword(user);

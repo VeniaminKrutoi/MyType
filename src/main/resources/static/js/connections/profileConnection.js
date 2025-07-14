@@ -102,29 +102,6 @@ function updateFail(text) {
     showNotification(text, "error");
 }
 
-function closeUser() {
-    fetch('http://localhost:8080/close')
-        .then(response => {
-            if (!response.ok) {
-                return response.text();
-            }
-            return null;
-        })
-        .then(data => typeof data === 'string' ?
-            closeFail(data) :
-            closeSuccess("До свидания!")
-        );
-}
-
-function closeFail(data) {
-    showNotification(data, "error");
-}
-
-function closeSuccess(data) {
-    showNotification(data);
-    setTimeout(window.location.reload(), 1000);
-}
-
 function deleteUser() {
     if (!confirm("Вы точно хотите удалить профиль?")) {
         return;
@@ -150,6 +127,6 @@ function deleteFail(data) {
 
 function deleteSuccess(data) {
     showNotification(data);
-    document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "id=; path=/; Max-Age=-1;";
     setTimeout(window.location.href = "http://localhost:8080", 1000);
 }

@@ -7,19 +7,6 @@ function addCookie(key, value) {
     document.cookie = `${encodeKey}=${encodeValue}; path=/`;
 }
 
-function checkId(){
-    if (document.cookie.includes("id=")) {
-        const exitButton = document.getElementById("exitButton");
-
-        exitButton.style.color = "black";
-        exitButton.disabled = false;
-
-        return true;
-    }
-
-    return false;
-}
-
 function getValue(key) {
     const cookie = document.cookie;
     const keyString = key + "=";

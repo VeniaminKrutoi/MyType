@@ -2,71 +2,16 @@ const SECOND = 1000;
 const MINUTE = 60;
 const HOUR = 60;
 
-let index, error_count, start_time, finished, letters, text, author, source, waiting;
-
-document.addEventListener("keydown", function (event) {
-    if (finished) {
-        return;
-    }
-
-    if (index > 0 && event.key === "Backspace") {
-        letters[index - 1].className = "writing";
-        index--;
-    }
-});
-
-document.addEventListener("keypress", function (event) {
-    if (finished && !waiting) {
-        startType();
-    }
-
-    if (text[index] === event.key) {
-        letters[index].className = "written"
-    } else {
-        letters[index].className = "error"
-        error_count++;
-    }
-
-    index++;
-
-    if (index === text.length) {
-        endType()
-    }
-});
+let index, error_count, start_time, letters;
 
 const type = document.getElementById("type");
 
-function waitData() {
-    waiting = true;
-    window.dataPromise.then(data => {
-        console.log(data);
-        if ('text' in data) {
-            setData(data);
-            fillTyping();
-        } else {
-            connectionFail();
-        }
-    });
-}
-
-function connectionFail(){
-    const uploading_el = document.getElementById("uploading");
-    uploading_el.style.visibility = "hidden";
-
-    const error_button_el = document.getElementById("error_button");
-    error_button_el.style.visibility = "visible";
-}
-
-function setData(data) {
-    text = data['text'];
-    author = data['author'];
-    source = data['sourceLink'];
-}
+let canType = false;
+let finished = true;
 
 function fillTyping() {
     index = 0;
     error_count = 0;
-    finished = true;
     letters = [];
 
     type.innerHTML = "";
@@ -102,15 +47,49 @@ function fillTyping() {
     const uploading_el = document.getElementById("uploading");
     uploading_el.style.visibility = "hidden";
 
-    waiting = false;
+    canType = true;
+}
+
+function setKeyBoardListeners(){
+    document.addEventListener("keydown", function (event) {
+        if (finished) {
+            return;
+        }
+
+        if (index > 0 && event.key === "Backspace") {
+            letters[index - 1].className = "writing";
+            index--;
+        }
+    });
+
+    document.addEventListener("keypress", function (event) {
+        if (canType) {
+            startType();
+        }
+
+        if (finished) {
+            return;
+        }
+
+        if (text[index] === event.key) {
+            letters[index].className = "written";
+        } else {
+            letters[index].className = "error";
+            error_count++;
+        }
+
+        index++;
+
+        if (index === text.length) {
+            endType();
+        }
+    });
 }
 
 function startType() {
-
+    canType = false;
     finished = false;
-
     error_count = 0;
-
     start_time = Date.now();
 }
 
@@ -162,9 +141,31 @@ function fillResultTime(time_diff) {
     }
 }
 
-
 function restart() {
     fillTyping();
 }
 
-waitData();
+function getNewText(){
+    window.location.reload();
+}
+
+function connectionFail(data){
+    showNotification(data, "error");
+
+    const uploading_el = document.getElementById("uploading");
+    uploading_el.style.visibility = "hidden";
+
+    const error_button_el = document.getElementById("error_button");
+    error_button_el.style.visibility = "visible";
+}
+
+if (data !== null) {
+    const text = data['text'];
+    const author = data['author'];
+    const source = data['sourceLink'];
+
+    fillTyping();
+    setKeyBoardListeners();
+} else {
+    connectionFail("Проблемы с подключением");
+}

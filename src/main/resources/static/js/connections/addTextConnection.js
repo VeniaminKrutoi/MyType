@@ -32,24 +32,18 @@ document.getElementById("addText")
                 .then(response => {
 
                     if (!response.ok) {
-                        throw new Error("Не удалось подключиться к серверу");
+                        return response.text();
                     }
-                    return response.text();
+                    return response.json();
                 })
-                .then(data => {
-                    if (data === "success") {
-                        connectionSuccess();
-                    } else {
-                        connectionFail(data)
-                    }
-                })
+                .then(data => typeof data === "string" ? connectionFail(data) : connectionSuccess())
                 .catch(error => connectionFail(error.message));
         }
     );
 
 function connectionSuccess() {
     console.log("success");
-    showNotification("Текст отправлен");
+    showNotification("Текст отправлен на проверку");
 }
 
 function connectionFail(error) {

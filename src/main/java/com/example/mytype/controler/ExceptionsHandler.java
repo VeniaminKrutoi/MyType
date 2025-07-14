@@ -39,6 +39,13 @@ public class ExceptionsHandler {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(TextNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String handleTextNotFoundException(TextNotFoundException ex) {
+        System.out.println(Arrays.toString(ex.getStackTrace()));
+        return ex.getMessage();
+    }
+
     @ExceptionHandler(SessionNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     String handleSessionNotFoundException(SessionNotFoundException ex) {

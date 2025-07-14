@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>MyType</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="js/connections/indexConnection.js"></script>
+    <script th:inline="javascript">
+        const data = /*[[${text}]]*/ null;
+        console.log(data);
+    </script>
+    <script th:src="@{js/notificationMenu.js}"></script>
+    <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
 <header>
@@ -12,9 +16,8 @@
     <button class="menu-button" onclick="toggleMenu();">Меню</button>
     <div class="dropdown-content" id="dropdownMenu">
         <a href="http://localhost:8080/profile">Профиль</a>
-        <a href="http://localhost:8080">Главная</a>
         <a href="http://localhost:8080/add">Добавить текст</a>
-        <a href="#">Контакты</a>
+        <button disabled id="exitButton">Выход</button>
     </div>
 </header>
 
@@ -24,14 +27,14 @@
     </div>
 
     <div class="error-button" >
-        <button id="error_button" onclick="{changeText(); waitData();}">
+        <button id="error_button" onclick="getNewText()">
             Проблема с подключением. Попробуйте еще раз.
         </button>
     </div>
 
     <div class="text-full" id="text_full">
         <div class="control-typing">
-            <button onclick="{changeText(); waitData();}">Другой текст</button>
+            <button onclick="getNewText()">Другой текст</button>
             <button onclick="restart()">Перезапуск</button>
         </div>
         <div class="result" id="result">
@@ -79,8 +82,9 @@
     Контакты: venya2005@email.com
 </footer>
 
-<script src="js/menuControl.js"></script>
-<script src="js/typeController.js"></script>
+<div id="notifications" style="position: fixed; top: 80px; left:30px; z-index: 9999;"></div>
 
+<script th:src="@{/js/controls/popUpMenusControl.js}"></script>
+<script th:src="@{/js/controls/typeControl.js}"></script>
 </body>
 </html>

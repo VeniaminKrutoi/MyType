@@ -7,6 +7,7 @@ import com.example.mytype.exceptions.WrongDataException;
 import com.example.mytype.model.User;
 import com.example.mytype.repository.UserRep;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.Map;
@@ -32,8 +33,18 @@ public class UserService implements UserServ {
 
     @Override
     public List<User> findFromTo(long from, long to) {
-        if (from > to || to <= 0) {
+        if (from > to || to < 0) {
             throw new WrongDataException("индекс начала или индекс конца");
+        }
+
+        if (from < 0) {
+            from = 0;
+        }
+
+        final long count = repository.count();
+
+        if (to > count) {
+            to = count;
         }
 
         return repository.findFromTo(from, to);
@@ -61,7 +72,11 @@ public class UserService implements UserServ {
         user.setTime(0L);
         user.setRole("USER");
 
-        return repository.save(user);
+        try {
+            return repository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new WrongDataException("Данный пользователь уже существует");
+        }
     }
 
     @Override
@@ -123,7 +138,7 @@ public class UserService implements UserServ {
 
     @Override
     public void delete(Long id) {
-        if (repository.findById(id).orElse(null) == null) {
+        if (repository.findById(id).isEmpty()) {
             throw new WrongDataException("id");
         }
 

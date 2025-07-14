@@ -1,5 +1,9 @@
 package com.example.mytype.service.text;
 
+import com.example.mytype.exceptions.EmptyDataException;
+import com.example.mytype.exceptions.TextNotFoundException;
+import com.example.mytype.exceptions.TooBigException;
+import com.example.mytype.exceptions.WrongDataException;
 import com.example.mytype.model.TypeText;
 import com.example.mytype.repository.TypeTextRep;
 import lombok.AllArgsConstructor;
@@ -7,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @org.springframework.stereotype.Service
 @AllArgsConstructor
@@ -19,8 +24,20 @@ public class TextService implements TextServ {
     }
 
     @Override
+    public List<TypeText> findAllByCheck(boolean checked) {
+        return  repository.findAllByCheck(checked);
+    }
+
+
+    @Override
     public TypeText findById(Long id) {
-        return repository.getReferenceById(id);
+        TypeText text = repository.findById(id).orElse(null);
+
+        if (text == null) {
+            throw new TextNotFoundException("Нет такого id");
+        }
+
+        return text;
     }
 
     @Override
@@ -30,6 +47,11 @@ public class TextService implements TextServ {
 
     public long count() {
         return repository.count();
+    }
+
+    @Override
+    public long countCheck(boolean checked) {
+        return repository.countAllByCheck(checked);
     }
 
     @Override
@@ -43,69 +65,114 @@ public class TextService implements TextServ {
 
     @Override
     public TypeText findByIndex(long index) {
+        if (index > 0 || index <= repository.count()) {
+            return null;
+        }
+
         return repository.findByIndex(index);
     }
 
     @Override
-    public String save(Map<String, String> data) {
+    public TypeText save(Map<String, String> data) {
         TypeText typeText = new TypeText();
 
-        if (infoExist(data, "title")) {
-            final String title = data.get("title");
+        setTitleAuthorSourceLink(data, typeText);
 
-            if (tooBig(title, TypeText.TITLE_LEN)) {
-                return "Название текста слишком длинное";
-            }
-
-            typeText.setText(data.get("title"));
-        }
-
-        if (infoExist(data, "author")) {
-            final String author = data.get("author");
-
-            if (tooBig(author, TypeText.AUTHOR_LEN)) {
-                return "Имя автора слишком длинное";
-            }
-
-            typeText.setAuthor(data.get("author"));
-        }
-
-        if (infoExist(data, "sourceLink")) {
-            final String sourceLink = data.get("sourceLink");
-
-            if (tooBig(sourceLink, TypeText.SOURCE_LINK_LEN)) {
-                return "Ссылка на ресурс слишком длинная";
-            }
-
-            typeText.setSourceLink(data.get("sourceLink"));
-        }
-
-        if (!infoExist(data, "text")) {
-            return "Текст обязан присутствовать";
-        }
-
-        final String text = data.get("text");
-
-        if (tooBig(text, TypeText.TEXT_LEN)) {
-            return "Текст слишком длинный";
-        }
-
-        typeText.setText(text);
+        checkExceptions(data, "text", TypeText.TEXT_LEN, "текст");
+        typeText.setText(data.get("text"));
+        typeText.setChecked(false);
 
         try {
-            repository.save(typeText);
-        } catch (DataIntegrityViolationException ex) {
-            return "Данный текст уже существует";
+            return repository.save(typeText);
+        } catch (DataIntegrityViolationException e) {
+            throw new WrongDataException("Данный текст уже существуетя");
         }
 
-        return "success";
     }
 
-    private boolean infoExist(Map<String, String> data, String key) {
+    @Override
+    public TypeText update(Long id, Map<String, String> data) {
+        TypeText text = findById(id);
+
+        setTitleAuthorSourceLink(data, text);
+
+        if (existAndNotTooBigException(data, "text", TypeText.TEXT_LEN, "текст")) {
+            text.setText(data.get("text"));
+        }
+
+        try {
+            return repository.save(text);
+        } catch (DataIntegrityViolationException ex) {
+            throw new WrongDataException("Данный текст уже существует");
+        }
+    }
+
+    private void setTitleAuthorSourceLink(Map<String, String> data, TypeText text) {
+        if (existAndNotTooBigException(data, "title", TypeText.TITLE_LEN, "название")) {
+            text.setTitle(data.get("title"));
+        }
+
+        if (existAndNotTooBigException(data, "author", TypeText.AUTHOR_LEN, "автор")) {
+            text.setAuthor(data.get("author"));
+        }
+
+        if (existAndNotTooBigException(data, "sourceLink", TypeText.SOURCE_LINK_LEN, "источник")) {
+            text.setSourceLink(data.get("sourceLink"));
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (repository.findById(id).isEmpty()) {
+            throw new WrongDataException("id");
+        }
+
+        repository.deleteById(id);
+    }
+
+    @Override
+    public long getRandomIndex() {
+        long count = countCheck(true);
+        Random random = new Random();
+        try {
+            return random.nextLong(0, count);
+        } catch (Exception ex) {
+            return -1;
+        }
+    }
+
+    private static boolean existAndNotTooBigException(
+            Map<String, String> data,
+            String attribute,
+            int attLen,
+            String errorMessage
+    ) {
+        if (dataEmpty(data, attribute)) {
+            return false;
+        }
+
+        if (tooBig(data.get(attribute), attLen)) {
+            throw new TooBigException(errorMessage, attLen);
+        }
+
+        return true;
+    }
+
+    private static void checkExceptions(Map<String, String> data, String attribute, int attLen, String errorMessage) {
+        if (dataEmpty(data, attribute)) {
+            throw new EmptyDataException(errorMessage);
+        }
+
+        if (tooBig(data.get(attribute), attLen)) {
+            throw new TooBigException(errorMessage, attLen);
+        }
+    }
+
+    private static boolean dataEmpty(Map<String, String> data, String key) {
         return data.containsKey(key) && data.get(key) != null && !data.get(key).isEmpty();
     }
 
-    private boolean tooBig(String value, int len) {
+    private static boolean tooBig(String value, int len) {
         return value.length() > len;
     }
 }
