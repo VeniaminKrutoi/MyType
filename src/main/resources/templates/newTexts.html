@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My type. Принятие текстов</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header>
+    mytype
+    <button class="menu-button" onclick="toggleMenu();">Меню</button>
+    <div class="dropdown-content" id="dropdownMenu">
+        <a href="http://localhost:8080">Главная</a>
+        <a href="http://localhost:8080/profile">Профиль</a>
+        <a href="http://localhost:8080/add">Добавить текст</a>
+        <button disabled onclick="closeUser();" id="exitButton">Выход</button>
+    </div>
+</header>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Тексты</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr><td style="font-size: 24px; cursor: pointer;" onclick="openMenu()">ПРИМЕР</td></tr>
+    <tr><td style="font-size: 24px; cursor: pointer;" onclick="openMenu()">ТЕКСТ</td></tr>
+    <tr><td style="font-size: 24px; cursor: pointer;" onclick="openMenu()">ДАННЫЕ</td></tr>
+    </tbody>
+</table>
+
+<div id="overlayMenu" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+     background-color: white; z-index: 1000; padding: 40px; box-sizing: border-box;">
+    <form class="add-text" id="addText">
+        <h1>Добавить текст</h1>
+        <label for="title">Название:</label>
+        <input type="text" id="title" name="title" placeholder="Название текста (необязательно)">
+
+        <label for="author">Автор:</label>
+        <input type="text" id="author" name="author" placeholder="Имя автора текста (необязательно)">
+
+        <label for="source">Источник:</label>
+        <input type="text" id="source" name="source" placeholder="Ссылка на текст (необязательно)">
+
+        <label for="content">Текст:</label>
+        <textarea id="content" name="content" placeholder="Текст"></textarea>
+
+        <button onclick="closeMenu()"> Вернуться </button>
+        <button type="submit" style="margin-top: 20px; align-self:right">Отправить</button>
+    </form>
+</div>
+
+<footer>
+    Контакты: venya2005@email.com
+</footer>
+
+<div id="notifications" style="position: fixed; top: 80px; left:30px; z-index: 9999;"></div>
+
+<script src="js/controls/popUpMenusControl.js"></script>
+
+<script>
+    function openMenu() {
+        document.getElementById('overlayMenu').style.display = 'block';
+    }
+
+    function closeMenu() {
+        document.getElementById('overlayMenu').style.display = 'none';
+    }
+</script>
+</body>
+</html>

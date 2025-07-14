@@ -368,7 +368,8 @@ footer {
 
 .profile-name,
 .profile-email,
-.profile-password {
+.profile-password,
+.check-new-text-button {
     font-size: 20px;
     color: #222;
 }
