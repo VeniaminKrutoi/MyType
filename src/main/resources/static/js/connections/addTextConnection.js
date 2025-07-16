@@ -22,7 +22,7 @@ document.getElementById("addText")
                 text: content
             };
 
-            fetch('http://localhost:8080/add', {
+            fetch('http://localhost:8080/texts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

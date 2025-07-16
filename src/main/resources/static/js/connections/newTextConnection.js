@@ -5,6 +5,7 @@ document.getElementById("addText")
             event.preventDefault();
 
             const data = {
+                id: null,
                 title: null,
                 author: null,
                 sourceLink: null,
@@ -12,10 +13,11 @@ document.getElementById("addText")
                 checked: true
             };
 
+            data["id"] = document.getElementById("id").innerText;
             data["title"] = document.getElementById("title").value;
             data["author"] = document.getElementById("author").value;
             data["sourceLink"] = document.getElementById("source").value;
-            data["text"] = document.getElementById("text").value;
+            data["text"] = document.getElementById("content").value;
 
             fetch("http://localhost:8080/save/update", {
                 method: "POST",
@@ -31,7 +33,7 @@ document.getElementById("addText")
 
                     return response.json();
                 })
-                .then(data => typeof data === "string" ? connectionFail() : connectionSuccess("Успех"));
+                .then(data => typeof data === "string" ? connectionFail(data) : connectionSuccess("Успех"));
         });
 
 function connectionFail(text) {

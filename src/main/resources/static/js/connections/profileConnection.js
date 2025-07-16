@@ -4,23 +4,23 @@ if (user === null) {
     connectionSuccess(user);
 }
 
-function connectionSuccess(data) {
+function connectionSuccess() {
     const nameEl = document.getElementById("username");
-    nameEl.innerText = data['username'];
+    nameEl.innerText = user['username'];
 
     const emailEl = document.getElementById("email");
     if (emailEl) {
-        emailEl.innerText = data['email'];
+        emailEl.innerText = user['email'];
     }
 
     const passwordEl = document.getElementById("password");
     if (passwordEl) {
-        passwordEl.innerText = data['password'];
+        passwordEl.innerText = user['password'];
     }
 
     //Sign Per Minute Element
     const spmEl = document.getElementById("spm");
-    const typeResults = data['typeResult'];
+    const typeResults = user['typeResult'];
     if (Array.isArray(typeResults) && typeResults.length !== 0) {
         const averageSpm = Math.round(typeResults.reduce((acc, num) => acc + num, 0) / typeResults.length);
         spmEl.innerText = averageSpm.toString();
@@ -29,10 +29,10 @@ function connectionSuccess(data) {
     }
 
     const timeEl = document.getElementById("time");
-    if (data['time'] === null) {
+    if (user['time'] === null) {
         timeEl.innerText = "0";
     } else {
-        timeEl.innerText = data['time'];
+        timeEl.innerText = user['time'];
     }
 
     const profileEl = document.getElementById("profile");

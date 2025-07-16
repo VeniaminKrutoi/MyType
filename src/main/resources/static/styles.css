@@ -122,7 +122,7 @@ header {
 
 .text p {
     white-space: pre-wrap;
-    font-size: 20pt;
+    font-size: 4vw;
     margin: 0;
     padding-top: 10pt;
 }
@@ -172,7 +172,7 @@ header {
 .result-numbers p {
     margin-top: auto;
     margin-bottom: 1vw;
-    font-size: 4vw;
+    font-size: 3.5vw;
     color: #2c3e50;
 }
 
@@ -259,7 +259,7 @@ footer {
     color: #333;
 }
 
-.add-text {
+.add-{
     font-family: Arial, sans-serif;
     width: 60vw;
     margin: 40px auto;

@@ -51,12 +51,7 @@ public class PageController {
             return "redirect:/auth";
         }
 
-        model.addAttribute("user", Map.of(
-                "id", "-1",
-                "own", true
-        ));
-
-        return "/profile";
+        return "redirect:/profile/" + session.getAttribute("userId");
     }
 
     @GetMapping("/auth")
@@ -117,7 +112,7 @@ public class PageController {
             throw new WrongDataException("Недоступно");
         }
 
-        model.addAttribute("text", textService.findAllByCheck(false));
+        model.addAttribute("texts", textService.findAllByCheck(false));
 
         return "/newTexts";
     }

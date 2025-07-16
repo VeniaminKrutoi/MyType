@@ -9,6 +9,10 @@ const type = document.getElementById("type");
 let canType = false;
 let finished = true;
 
+const text = data['text'];
+const author = data['author'];
+const source = data['sourceLink'];
+
 function fillTyping() {
     index = 0;
     error_count = 0;
@@ -131,8 +135,6 @@ function endType() {
         },
         SECOND
     );
-
-
 }
 
 function fillResultTime(time_diff) {
@@ -159,7 +161,7 @@ function getNewText(){
     window.location.reload();
 }
 
-function connectionFail(data){
+function textFail(data){
     showNotification(data, "error");
 
     const uploading_el = document.getElementById("uploading");
@@ -170,12 +172,8 @@ function connectionFail(data){
 }
 
 if (data !== null) {
-    const text = data['text'];
-    const author = data['author'];
-    const source = data['sourceLink'];
-
     fillTyping();
     setKeyBoardListeners();
 } else {
-    connectionFail("Проблемы с подключением");
+    textFail("Проблемы с подключением");
 }

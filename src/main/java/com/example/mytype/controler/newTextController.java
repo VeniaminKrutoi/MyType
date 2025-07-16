@@ -22,6 +22,10 @@ public class newTextController {
             throw new WrongDataException("Отказ в доступе");
         }
 
-        return service.update(Long.valueOf(data.get("id")), data);
+        try {
+            return service.update(Long.valueOf(data.get("id")), data);
+        } catch (NumberFormatException e) {
+            throw new WrongDataException("id");
+        }
     }
 }

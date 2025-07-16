@@ -37,6 +37,7 @@
      background-color: white; z-index: 1000; padding: 40px; box-sizing: border-box;">
     <form class="add-text" id="addText">
         <h1>Добавить текст</h1>
+        <p style="display: none" id="id"></p>
         <label for="title">Название:</label>
         <input type="text" id="title" name="title" placeholder="Название текста (необязательно)">
 
@@ -62,5 +63,6 @@
 
 <script th:src="@{js/controls/popUpMenusControl.js}"></script>
 <script th:src="@{js/controls/newTextControl.js}"></script>
+<script th:src="@{js/connections/newTextConnection.js}"></script>
 </body>
 </html>

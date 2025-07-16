@@ -25,7 +25,7 @@ public class TextService implements TextServ {
 
     @Override
     public List<TypeText> findAllByCheck(boolean checked) {
-        return  repository.findAllByCheck(checked);
+        return repository.findAllByCheck(checked);
     }
 
 
@@ -65,7 +65,7 @@ public class TextService implements TextServ {
 
     @Override
     public TypeText findByIndex(long index) {
-        if (index > 0 || index <= repository.count()) {
+        if (index < 0 || index > repository.count()) {
             return null;
         }
 
@@ -78,6 +78,8 @@ public class TextService implements TextServ {
 
         setTitleAuthorSourceLink(data, typeText);
 
+        System.out.println(data.get("text"));
+
         checkExceptions(data, "text", TypeText.TEXT_LEN, "текст");
         typeText.setText(data.get("text"));
         typeText.setChecked(false);
@@ -85,7 +87,7 @@ public class TextService implements TextServ {
         try {
             return repository.save(typeText);
         } catch (DataIntegrityViolationException e) {
-            throw new WrongDataException("Данный текст уже существуетя");
+            throw new WrongDataException("Данный текст уже существует");
         }
 
     }
@@ -96,26 +98,11 @@ public class TextService implements TextServ {
 
         setTitleAuthorSourceLink(data, text);
 
-        TypeText badText = repository.findByText(data.get("text"));
-
         if (existAndNotTooBigException(data, "checked", 256, "флаг проверки")) {
-            if (badText != null) {
-                if (!badText.isChecked()) {
-                    delete(badText.getId());
-                    badText.setText(null);
-                } else {
-                    throw new WrongDataException("Такой текст уже есть");
-                }
-            }
-
             text.setChecked(true);
         }
 
         if (existAndNotTooBigException(data, "text", TypeText.TEXT_LEN, "текст")) {
-            if (badText != null) {
-                throw new WrongDataException("Такой текст уже есть");
-            }
-
             text.setText(data.get("text"));
         }
 
@@ -166,7 +153,7 @@ public class TextService implements TextServ {
             int attLen,
             String errorMessage
     ) {
-        if (dataEmpty(data, attribute)) {
+        if (!dataNotEmpty(data, attribute)) {
             return false;
         }
 
@@ -178,7 +165,7 @@ public class TextService implements TextServ {
     }
 
     private static void checkExceptions(Map<String, String> data, String attribute, int attLen, String errorMessage) {
-        if (dataEmpty(data, attribute)) {
+        if (!dataNotEmpty(data, attribute)) {
             throw new EmptyDataException(errorMessage);
         }
 
@@ -187,7 +174,7 @@ public class TextService implements TextServ {
         }
     }
 
-    private static boolean dataEmpty(Map<String, String> data, String key) {
+    private static boolean dataNotEmpty(Map<String, String> data, String key) {
         return data.containsKey(key) && data.get(key) != null && !data.get(key).isEmpty();
     }
 
