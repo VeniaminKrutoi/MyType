@@ -3,7 +3,7 @@ package com.example.mytype.controler;
 import com.example.mytype.exceptions.SessionNotFoundException;
 import com.example.mytype.exceptions.UserNotFoundException;
 import com.example.mytype.exceptions.WrongDataException;
-import com.example.mytype.service.user.UserService;
+import com.example.mytype.service.user.UserServiceImpl;
 import com.example.mytype.model.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:63342")
 public class UsersController {
-    private UserService service;
+    private UserServiceImpl service;
 
     @PostMapping
     public User regUser(HttpSession session, @RequestBody Map<String, String> user) {

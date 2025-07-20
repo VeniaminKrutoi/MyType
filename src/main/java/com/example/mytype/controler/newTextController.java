@@ -2,7 +2,7 @@ package com.example.mytype.controler;
 
 import com.example.mytype.exceptions.WrongDataException;
 import com.example.mytype.model.TypeText;
-import com.example.mytype.service.text.TextService;
+import com.example.mytype.service.text.TextServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:63342")
 public class newTextController {
-    private TextService service;
+    private TextServiceImpl service;
 
     @PostMapping("/update")
     public TypeText updateChecked(HttpSession session, @RequestBody Map<String, String> data) {

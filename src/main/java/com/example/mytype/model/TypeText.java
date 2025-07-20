@@ -32,7 +32,7 @@ public class TypeText {
     @Column(length = SOURCE_LINK_LEN)
     private String sourceLink;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private boolean checked;
 
     public TypeText() {

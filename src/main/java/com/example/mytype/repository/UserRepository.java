@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface UserRep extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
     User findById(long id);
     User findByEmail(String email);
     User findByUsername(String username);
@@ -15,8 +15,6 @@ public interface UserRep extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM users ORDER BY id LIMIT 1 OFFSET :index", nativeQuery = true)
     User findByIndex(@Param("index") long index);
 
-    @Query(value = "SELECT * FROM users ORDER BY type_results DESC LIMIT :to - :from OFFSET :from", nativeQuery = true)
-    List<User> findFromTo(@Param("from") long from, @Param("to") long to);
-
-
+    @Query(value = "SELECT * FROM users u JOIN (SELECT user_id, AVG(spm) AS avg_spm FROM type_tries GROUP BY user_id) t ON u.id = t.user_id ORDER BY t.avg_spm DESC LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<User> findFromTo(@Param("limit") long limit, @Param("offset") long offset);
 }

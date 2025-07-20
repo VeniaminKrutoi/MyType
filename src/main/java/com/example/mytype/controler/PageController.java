@@ -4,8 +4,8 @@ package com.example.mytype.controler;
 import com.example.mytype.exceptions.WrongDataException;
 import com.example.mytype.model.TypeText;
 import com.example.mytype.model.User;
-import com.example.mytype.service.text.TextService;
-import com.example.mytype.service.user.UserService;
+import com.example.mytype.service.text.TextServiceImpl;
+import com.example.mytype.service.user.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,8 +20,8 @@ import java.util.Map;
 @Controller
 @AllArgsConstructor
 public class PageController {
-    private final TextService textService;
-    private final UserService userService;
+    private final TextServiceImpl textService;
+    private final UserServiceImpl userService;
 
     @GetMapping("/")
     public String index(Model model, @RequestParam(required = false) String textId) {

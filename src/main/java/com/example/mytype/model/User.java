@@ -4,8 +4,6 @@ package com.example.mytype.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Entity
 @Table(name = "users")
@@ -26,11 +24,6 @@ public class User {
 
     @Column(length = PASSWORD_LEN)
     private String password;
-
-    private Integer typeResults;
-    private Integer typeCount;
-
-    private Long time;
 
     @Column(nullable = false)
     private String role;
